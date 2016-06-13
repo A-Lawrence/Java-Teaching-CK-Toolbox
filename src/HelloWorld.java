@@ -7,7 +7,7 @@ public class HelloWorld {
     public static void main(String[] args){
         System.out.println("Hello World");
 
-        String gender = Helpers.getInput("Enter your gender: ");
+        String gender = Helpers.getInput("Enter your gender please: ");
         System.out.println("You are " + gender);
     }
 }
