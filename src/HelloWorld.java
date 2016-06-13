@@ -8,6 +8,6 @@ public class HelloWorld {
         System.out.println("Hello World");
 
         String gender = Helpers.getInput("Enter your gender please: ");
-        System.out.println("You are " + gender);
+        System.out.println("You are " + gender + ".");
     }
 }
