@@ -9,5 +9,13 @@ public class HelloWorld {
 
         String gender = Helpers.getInput("Enter your gender please: ");
         System.out.println("You are " + gender + ".");
+
+        if(gender.equalsIgnoreCase("male")) {
+            System.out.println("You are male");
+        } else if(gender.equalsIgnoreCase("female")){
+            System.out.println("You are female");
+        } else {
+            System.out.println("You are unknown");
+        }
     }
 }
