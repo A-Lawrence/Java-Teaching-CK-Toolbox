@@ -11,4 +11,10 @@ public class Helpers {
 
         return myScanner.nextLine().trim();
     }
+    public static int getIntput(String message){
+        String r = getInput(message);
+
+        return Integer.parseInt(r);
+    }
 }
+
