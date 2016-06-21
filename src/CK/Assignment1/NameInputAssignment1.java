@@ -1,3 +1,7 @@
+package CK.Assignment1;
+
+import CK.Helpers;
+
 /**
  * Created by connorkeevill12 on 17/06/2016.
  */
