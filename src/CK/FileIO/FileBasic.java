@@ -15,7 +15,7 @@ public class FileBasic {
         String line;
 
         try {
-            bw = new BufferedWriter(new FileWriter("src/CK/FileIO/output_filebasic.txt"));
+            bw = new BufferedWriter(new FileWriter("./data/output_filebasic.txt"));
             do {
                 line = br.readLine();
                 wholeFile = wholeFile + line + " ";

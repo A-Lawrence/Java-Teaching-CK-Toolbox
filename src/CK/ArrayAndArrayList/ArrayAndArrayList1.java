@@ -1,4 +1,4 @@
-package CK.Arrays;
+package CK.ArrayAndArrayList;
 
 import java.util.ArrayList;
 

@@ -14,18 +14,21 @@ public class FileSearching {
         BufferedReader bReader;
 
         try {
-            bReader = new BufferedReader(new FileReader("src/CK/FileIO/dictionary.txt"));
+            bReader = new BufferedReader(new FileReader("./data/dictionary.txt"));
             String wordToFind = Helpers.getInput("Enter the word to find in the file: ");
 
-            for(int line = 1; bReader.readLine() != null; line++){
-                System.out.println(bReader.readLine() + Integer.toString(line));
-                //Unsure why this if statement never executes
-                //even when entering a string which I know
-                //I put in dictionary.txt, e.g. "bacon"
-                if(bReader.readLine().equalsIgnoreCase(wordToFind)){
-                    System.out.println(wordToFind + " is on line, " + line);
+            String lineValue = "";
+            int lineNumber = 1;
+
+            while((lineValue = bReader.readLine()) != null){
+
+                if(lineValue.trim().equalsIgnoreCase(wordToFind)){
+                    System.out.println(wordToFind + " is on line, " + lineNumber);
                 }
+
+                lineNumber++;
             }
+
         }catch (IOException e){
             System.err.println("There was an error handling the file.");
         }
