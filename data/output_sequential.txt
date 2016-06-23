@@ -1,3 +1,9 @@
-dude, 123
-fail, 234
-bad, 001
+CLK, 999
+AVL, 832
+JPZ, 324
+YMCA, 281
+BFG, 280
+GIF, 194
+JPG, 120
+PNG, 063
+PSD, 023
