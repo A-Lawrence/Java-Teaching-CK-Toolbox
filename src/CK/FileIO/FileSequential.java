@@ -53,8 +53,10 @@ public class FileSequential {
             return midPointOfSector;
         }
         if (Integer.parseInt(lineItems[1].trim()) < score) {
+            System.out.println(getIndexOfHighScore(startPoint, midPointOfSector, file, score));
             return (midPointOfSector = getIndexOfHighScore(startPoint, midPointOfSector, file, score));
         } else if (Integer.parseInt(lineItems[1].trim()) > score) {
+            System.out.println(getIndexOfHighScore(midPointOfSector, endPoint, file, score));
             return (midPointOfSector = getIndexOfHighScore(midPointOfSector, endPoint, file, score));
         }
         return 0;
