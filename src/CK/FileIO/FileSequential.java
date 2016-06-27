@@ -46,21 +46,30 @@ public class FileSequential {
 
         int midPointOfSector = calculateMidPoint(startPoint, endPoint);
         String[] lineItems = (String[]) file.get(midPointOfSector);
-
-        //guardAgainstStackOverflow()
+        //An error occurs when a non-existent highscore is entered, causing a stack overflow error
+        //due to the never terminating recursive call. This method aims to identify when theres
+        //a highscore that doesn't exist, and prevent the stack overflow error from occuring.
+        guardAgainstStackOverflow();
 
         if (Integer.parseInt(lineItems[1].trim()) == score) {
             return midPointOfSector;
         }
         if (Integer.parseInt(lineItems[1].trim()) < score) {
-            System.out.println(getIndexOfHighScore(startPoint, midPointOfSector, file, score));
-            return (midPointOfSector = getIndexOfHighScore(startPoint, midPointOfSector, file, score));
+            midPointOfSector = getIndexOfHighScore(startPoint, midPointOfSector, file, score);
+            System.out.println(midPointOfSector);
+            return (midPointOfSector);
         } else if (Integer.parseInt(lineItems[1].trim()) > score) {
-            System.out.println(getIndexOfHighScore(midPointOfSector, endPoint, file, score));
-            return (midPointOfSector = getIndexOfHighScore(midPointOfSector, endPoint, file, score));
+            midPointOfSector = getIndexOfHighScore(midPointOfSector, endPoint, file, score);
+            System.out.println(midPointOfSector);
+            return (midPointOfSector);
         }
         return 0;
     }
+
+    private static void guardAgainstStackOverflow(){
+
+    }
+
     private static int calculateMidPoint(int startPoint, int endPoint) {
         return (startPoint + endPoint) / 2;
     }
