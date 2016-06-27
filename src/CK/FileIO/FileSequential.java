@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class FileSequential {
     public static void main(String[] args) {
 
-        String username = Helpers.getInput("Enter your username: ");
+        //String username = Helpers.getInput("Enter your username: ");
         int highscore = Helpers.getIntput("Enter your highscore: ");
 
         ArrayList file = loadFile();
@@ -47,17 +47,18 @@ public class FileSequential {
         int midPointOfSector = calculateMidPoint(startPoint, endPoint);
         String[] lineItems = (String[]) file.get(midPointOfSector);
 
+        //guardAgainstStackOverflow()
+
         if (Integer.parseInt(lineItems[1].trim()) == score) {
             return midPointOfSector;
         }
         if (Integer.parseInt(lineItems[1].trim()) < score) {
-            return getIndexOfHighScore(startPoint, midPointOfSector, file, score);
+            return (midPointOfSector = getIndexOfHighScore(startPoint, midPointOfSector, file, score));
         } else if (Integer.parseInt(lineItems[1].trim()) > score) {
-            return getIndexOfHighScore(midPointOfSector, endPoint, file, score);
+            return (midPointOfSector = getIndexOfHighScore(midPointOfSector, endPoint, file, score));
         }
         return 0;
     }
-
     private static int calculateMidPoint(int startPoint, int endPoint) {
         return (startPoint + endPoint) / 2;
     }
