@@ -4,6 +4,7 @@ import CK.Helpers;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
 /**
  * Created by connorkeevill12 on 22/06/2016.
@@ -44,33 +45,53 @@ public class FileSequential {
 
     private static int getIndexOfHighScore(int startPoint, int endPoint, ArrayList file, int score) {
 
-        int midPointOfSector = calculateMidPoint(startPoint, endPoint);
-        String[] lineItems = (String[]) file.get(midPointOfSector);
-        //An error occurs when a non-existent highscore is entered, causing a stack overflow error
-        //due to the never terminating recursive call. This method aims to identify when theres
-        //a highscore that doesn't exist, and prevent the stack overflow error from occuring.
-        guardAgainstStackOverflow();
+        int currentIndex = calculateCurrentIndex(startPoint, endPoint);
+        String[] lineItems = (String[]) file.get(currentIndex);
+        int item = getScoreFromFile(lineItems);
 
-        if (Integer.parseInt(lineItems[1].trim()) == score) {
-            return midPointOfSector;
+        if (item == score || isScoreNewRecord(score, currentIndex, file)){
+            return currentIndex;
+        }else if(currentIndex == file.size() - 1 && score < item){
+            return currentIndex + 1;
         }
-        if (Integer.parseInt(lineItems[1].trim()) < score) {
-            midPointOfSector = getIndexOfHighScore(startPoint, midPointOfSector, file, score);
-            System.out.println(midPointOfSector);
-            return (midPointOfSector);
-        } else if (Integer.parseInt(lineItems[1].trim()) > score) {
-            midPointOfSector = getIndexOfHighScore(midPointOfSector, endPoint, file, score);
-            System.out.println(midPointOfSector);
-            return (midPointOfSector);
+
+        if (item < score) {
+            currentIndex = getIndexOfHighScore(startPoint, currentIndex, file, score);
+            System.out.println(currentIndex);
+            return (currentIndex);
+        } else if (item > score) {
+            currentIndex = getIndexOfHighScore(currentIndex, endPoint, file, score);
+            System.out.println(currentIndex);
+            return (currentIndex);
         }
         return 0;
     }
 
-    private static void guardAgainstStackOverflow(){
+    //IT WORKS!!!!
+    //FINALLY AT 22:26 I HAVE FINALLY GOT THIS TO WORK!!
+    private static boolean isScoreNewRecord(int score, int index, ArrayList file){
 
+        String[] scoreNow = (String[]) file.get(index);
+        String[] higherScore = null;
+        String[] finalItem = (String[]) file.get(file.size() - 1);
+        if(index != 0){
+            higherScore = (String[]) file.get(index-1);
+        }
+
+        if(index == 0 && score > getScoreFromFile(scoreNow)){
+            return true;
+        }else if(score > getScoreFromFile(scoreNow) && score < getScoreFromFile(higherScore)){
+            return true;
+        }
+        return false;
+    }
+    
+    private static int getScoreFromFile(String[] line) {
+        return Integer.parseInt(line[1].trim());
     }
 
-    private static int calculateMidPoint(int startPoint, int endPoint) {
+    private static int calculateCurrentIndex(int startPoint, int endPoint) {
         return (startPoint + endPoint) / 2;
     }
+
 }
