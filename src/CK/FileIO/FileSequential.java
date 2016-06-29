@@ -17,8 +17,21 @@ public class FileSequential {
 
         ArrayList file = loadFile();
         int indexOfHighscore = getIndexOfHighScore(0, file.size(), file, highscore);
+        //not needed
         System.out.println(indexOfHighscore);
 
+        boolean newHighScore = isNewHighScore(highscore, indexOfHighscore, file);
+
+        //not needed
+        if(newHighScore){
+            System.out.println("The new score belongs in index: " + indexOfHighscore);
+        }else{
+            System.out.println("The new score already exists at index: " + indexOfHighscore);
+        }
+
+        if(newHighScore){
+            writeNewHighScore(file, "hello", indexOfHighscore, highscore);
+        }
     }
 
     private static ArrayList loadFile() {
@@ -57,23 +70,18 @@ public class FileSequential {
 
         if (item < score) {
             currentIndex = getIndexOfHighScore(startPoint, currentIndex, file, score);
-            System.out.println(currentIndex);
             return (currentIndex);
         } else if (item > score) {
             currentIndex = getIndexOfHighScore(currentIndex, endPoint, file, score);
-            System.out.println(currentIndex);
             return (currentIndex);
         }
         return 0;
     }
 
-    //IT WORKS!!!!
-    //FINALLY AT 22:26 I HAVE FINALLY GOT THIS TO WORK!!
     private static boolean isScoreNewRecord(int score, int index, ArrayList file){
 
         String[] scoreNow = (String[]) file.get(index);
         String[] higherScore = null;
-        String[] finalItem = (String[]) file.get(file.size() - 1);
         if(index != 0){
             higherScore = (String[]) file.get(index-1);
         }
@@ -94,4 +102,23 @@ public class FileSequential {
         return (startPoint + endPoint) / 2;
     }
 
+    private static boolean isNewHighScore(int score, int index, ArrayList file){
+        int scoreNow = getScoreFromFile((String[]) file.get(index));
+        return !(score == scoreNow);
+    }
+
+    private static void writeNewHighScore(ArrayList file, String user, int index, int score){
+        System.out.println(file.size());
+        ArrayList newFile = insertIntoFile(index, file);
+        System.out.println(newFile.size());
+    }
+
+    private static ArrayList insertIntoFile(int insertingIndex, ArrayList file){
+        String[] testData = {"Name", "Score"};
+        file.add(testData);
+        for(int index = file.size() - 1; index > insertingIndex; index--){
+            file.add(index, file.get(index - 1));
+        }
+        return file;
+    }
 }
