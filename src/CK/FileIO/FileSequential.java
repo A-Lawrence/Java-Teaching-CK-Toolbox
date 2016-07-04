@@ -4,7 +4,6 @@ import CK.Helpers;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.StringJoiner;
 
 /**
  * Created by connorkeevill12 on 22/06/2016.
@@ -30,7 +29,7 @@ public class FileSequential {
         }
 
         if(newHighScore){
-            writeNewHighScore(file, "hello", indexOfHighscore, highscore);
+            addNewHighscore(file, "hello", indexOfHighscore, highscore);
         }
     }
 
@@ -93,7 +92,7 @@ public class FileSequential {
         }
         return false;
     }
-    
+
     private static int getScoreFromFile(String[] line) {
         return Integer.parseInt(line[1].trim());
     }
@@ -107,18 +106,12 @@ public class FileSequential {
         return !(score == scoreNow);
     }
 
-    private static void writeNewHighScore(ArrayList file, String user, int index, int score){
-        System.out.println(file.size());
-        ArrayList newFile = insertIntoFile(index, file);
-        System.out.println(newFile.size());
+    private static void addNewHighscore(ArrayList file, String user, int index, int score) {
+        String[] write = {user, Integer.toString(score)};
+        file.add(write);
     }
 
-    private static ArrayList insertIntoFile(int insertingIndex, ArrayList file){
-        String[] testData = {"Name", "Score"};
-        file.add(testData);
-        for(int index = file.size() - 1; index > insertingIndex; index--){
-            file.add(index, file.get(index - 1));
-        }
-        return file;
+    private static void saveToFile(){
+        System.out.println("Hello");
     }
 }
