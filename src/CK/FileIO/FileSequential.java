@@ -1,9 +1,11 @@
 package CK.FileIO;
 
 import CK.Helpers;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by connorkeevill12 on 22/06/2016.
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 public class FileSequential {
     public static void main(String[] args) {
 
-        //String username = Helpers.getInput("Enter your username: ");
+        String username = Helpers.getInput("Enter your username: ");
         int highscore = Helpers.getIntput("Enter your highscore: ");
 
         ArrayList file = loadFile();
@@ -29,7 +31,9 @@ public class FileSequential {
         }
 
         if(newHighScore){
-            addNewHighscore(file, "hello", indexOfHighscore, highscore);
+            addNewHighscore(file, username, indexOfHighscore, highscore);
+        }else{
+            updateHighScore();
         }
     }
 
@@ -108,10 +112,26 @@ public class FileSequential {
 
     private static void addNewHighscore(ArrayList file, String user, int index, int score) {
         String[] write = {user, Integer.toString(score)};
-        file.add(write);
+        file.add(index, write);
+        saveToFile(file);
     }
 
-    private static void saveToFile(){
-        System.out.println("Hello");
+    private static void updateHighScore(ArrayList file, String user, int index, int score){
+        //work from here
+    }
+
+    private static void saveToFile(ArrayList<String[]> fileData){
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("./data/output_sequential.txt"));
+
+            for(int i = 0; i < fileData.size(); i++){
+                bw.write(String.join(",",  fileData.get(i)));
+                bw.newLine();
+            }
+
+            bw.close();
+        }catch(IOException e){
+            System.err.println("There was an error handling the file.");
+        }
     }
 }
