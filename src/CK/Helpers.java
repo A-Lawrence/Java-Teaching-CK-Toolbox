@@ -1,5 +1,6 @@
 package CK;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.jar.Pack200;
 
@@ -46,5 +47,27 @@ public class Helpers {
         } while (!confirm.equalsIgnoreCase(expectedOne) && !confirm.equalsIgnoreCase(expectedTwo));
         return confirm;
     }
+
+//    private static int binarySearch2DArrayList(int startPoint, int endPoint, ArrayList data, int target) {
+//
+//        int currentIndex = (startPoint + endPoint) / 2;
+//        String[] lineItems = (String[]) data.get(currentIndex);
+//        int item = getScoreFromFile(lineItems);
+//
+//        if (item == target || isScoreNewRecord(target, currentIndex, data)){
+//            return currentIndex;
+//        }else if(currentIndex == data.size() - 1 && target < item){
+//            return currentIndex + 1;
+//        }
+//
+//        if (item < target) {
+//            currentIndex = getIndexOfHighScore(startPoint, currentIndex, data, target);
+//            return (currentIndex);
+//        } else if (item > target) {
+//            currentIndex = getIndexOfHighScore(currentIndex, endPoint, data, target);
+//            return (currentIndex);
+//        }
+//        return 0;
+//    }
 }
 

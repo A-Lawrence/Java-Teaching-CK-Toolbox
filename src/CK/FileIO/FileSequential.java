@@ -1,11 +1,10 @@
 package CK.FileIO;
 
+import CK.FileIO.Highscore.Highscore;
 import CK.Helpers;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by connorkeevill12 on 22/06/2016.
@@ -16,8 +15,9 @@ public class FileSequential {
         String username = Helpers.getInput("Enter your username: ");
         int highscore = Helpers.getIntput("Enter your highscore: ");
 
-        ArrayList file = loadFile();
-        int indexOfHighscore = getIndexOfHighScore(0, file.size(), file, highscore);
+        ArrayList<Highscore> file = loadFile();
+
+        int indexOfHighscore = getIndexOfHighScore(0, file.size() - 1, file, highscore);
         //not needed
         System.out.println(indexOfHighscore);
 
@@ -33,13 +33,13 @@ public class FileSequential {
         if(newHighScore){
             addNewHighscore(file, username, indexOfHighscore, highscore);
         }else{
-            updateHighScore();
+            updateHighScore(file, username, indexOfHighscore, highscore);
         }
     }
 
-    private static ArrayList loadFile() {
+    private static ArrayList<Highscore> loadFile() {
 
-        ArrayList<String[]> wholeFile = new ArrayList<>();
+        ArrayList<Highscore> wholeFile = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("./data/output_sequential.txt"));
@@ -48,7 +48,8 @@ public class FileSequential {
             while ((line = br.readLine()) != null) {
                 String[] lineSplit = line.split(",");
                 if (lineSplit != null) {
-                    wholeFile.add(lineSplit);
+                    Highscore hs = new Highscore(lineSplit[0].trim(), lineSplit[1].trim());
+                    wholeFile.add(hs);
                 }
             }
             br.close();
@@ -59,73 +60,88 @@ public class FileSequential {
         return wholeFile;
     }
 
-    private static int getIndexOfHighScore(int startPoint, int endPoint, ArrayList file, int score) {
+    private static int getIndexOfHighScore(int startPoint, int endPoint, ArrayList<Highscore> file, int score) {
 
-        int currentIndex = calculateCurrentIndex(startPoint, endPoint);
-        String[] lineItems = (String[]) file.get(currentIndex);
-        int item = getScoreFromFile(lineItems);
+        int currentIndex = (startPoint + endPoint) / 2;
 
-        if (item == score || isScoreNewRecord(score, currentIndex, file)){
-            return currentIndex;
-        }else if(currentIndex == file.size() - 1 && score < item){
+        if(startPoint == endPoint){
             return currentIndex + 1;
         }
 
-        if (item < score) {
-            currentIndex = getIndexOfHighScore(startPoint, currentIndex, file, score);
-            return (currentIndex);
-        } else if (item > score) {
-            currentIndex = getIndexOfHighScore(currentIndex, endPoint, file, score);
-            return (currentIndex);
+        Highscore highscore = file.get(currentIndex);
+
+        if (highscore.getScore() == score){
+            return currentIndex;
         }
+
+        if (highscore.getScore() < score) {
+            return getIndexOfHighScore(startPoint, currentIndex - 1, file, score);
+        }
+
+        if (highscore.getScore() > score) {
+            return getIndexOfHighScore(currentIndex + 1, endPoint, file, score);
+        }
+
         return 0;
     }
 
-    private static boolean isScoreNewRecord(int score, int index, ArrayList file){
+//    private static boolean isScoreNewRecord(int score, int index, ArrayList file){
+//
+//        String[] scoreNow = (String[]) file.get(index);
+//        String[] higherScore = null;
+//        if(index != 0){
+//            higherScore = (String[]) file.get(index-1);
+//        }
+//
+//        if(index == 0 && score > getScoreFromFile(scoreNow)){
+//            return true;
+//        }else if(score > getScoreFromFile(scoreNow) && score < getScoreFromFile(higherScore)){
+//            return true;
+//        }
+//        return false;
+//    }
 
-        String[] scoreNow = (String[]) file.get(index);
-        String[] higherScore = null;
-        if(index != 0){
-            higherScore = (String[]) file.get(index-1);
-        }
+//    private static int getScoreFromFile(String[] line) {
+//        return Integer.parseInt(line[1].trim());
+//    }
+//
+//    private static String getNameFromFile(String[] line) {
+//        return line[0].trim();
+//    }
+//
+//    private static int calculateCurrentIndex(int startPoint, int endPoint) {
+//        return (startPoint + endPoint) / 2;
+//    }
 
-        if(index == 0 && score > getScoreFromFile(scoreNow)){
-            return true;
-        }else if(score > getScoreFromFile(scoreNow) && score < getScoreFromFile(higherScore)){
-            return true;
-        }
-        return false;
+    private static boolean isNewHighScore(int score, int index, ArrayList<Highscore> file){
+        Highscore scoreNow = file.get(index);
+        return !(score == scoreNow.getScore());
     }
 
-    private static int getScoreFromFile(String[] line) {
-        return Integer.parseInt(line[1].trim());
-    }
-
-    private static int calculateCurrentIndex(int startPoint, int endPoint) {
-        return (startPoint + endPoint) / 2;
-    }
-
-    private static boolean isNewHighScore(int score, int index, ArrayList file){
-        int scoreNow = getScoreFromFile((String[]) file.get(index));
-        return !(score == scoreNow);
-    }
-
-    private static void addNewHighscore(ArrayList file, String user, int index, int score) {
-        String[] write = {user, Integer.toString(score)};
-        file.add(index, write);
+    private static void addNewHighscore(ArrayList<Highscore> file, String user, int index, int score) {
+        Highscore hs = new Highscore(user, score);
+        file.add(index, hs);
         saveToFile(file);
     }
 
-    private static void updateHighScore(ArrayList file, String user, int index, int score){
-        //work from here
+    private static void updateHighScore(ArrayList<Highscore> file, String user, int index, int score){
+        Highscore data = new Highscore(user, score);
+        Highscore line = file.get(index);
+
+        if(line.getUsername() == user){
+            file.set(index, data);
+        }else{
+            file.add(index + 1, data);
+        }
     }
 
-    private static void saveToFile(ArrayList<String[]> fileData){
+    private static void saveToFile(ArrayList<Highscore> file){
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter("./data/output_sequential.txt"));
 
-            for(int i = 0; i < fileData.size(); i++){
-                bw.write(String.join(",",  fileData.get(i)));
+            for(int i = 0; i < file.size(); i++){
+                Highscore line = file.get(i);
+                bw.write(line.getUsername() + ", " + line.getScore());
                 bw.newLine();
             }
 
