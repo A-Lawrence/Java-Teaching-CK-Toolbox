@@ -1,8 +1,12 @@
+package CK.Assignment1;
+
+import CK.Helpers;
+
 /**
  * Created by connorkeevill12 on 17/06/2016.
  */
 public class NameInputAssignment1 {
-    public void main(String[] args) {
+    public static void main(String[] args) {
         String currentName = null;
 
         while (true) {
