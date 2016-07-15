@@ -1,4 +1,4 @@
-package CK.FileIO;
+package CK.FileIO.Highscore;
 
 import CK.FileIO.Highscore.Highscore;
 import CK.Helpers;
@@ -15,14 +15,22 @@ public class FileSequential {
         String username = Helpers.getInput("Enter your username: ");
         int highscore = Helpers.getIntput("Enter your highscore: ");
 
-        ArrayList<Highscore> file = loadFile();
+        HighscoreStore scoreBoard = new HighscoreStore("./data/output_sequential.txt");
 
-        int indexOfHighscore = getIndexOfHighScore(0, file.size() - 1, file, highscore);
-        //not needed
-        System.out.println(indexOfHighscore);
+        int indexOfHighscore = scoreBoard.findHighscorePosition(0, (scoreBoard.getHighscores().size()), highscore);
+        boolean userNewRecord = scoreBoard.isUserNewRecord(username, highscore);
 
-        boolean newHighScore = isNewHighScore(highscore, indexOfHighscore, file);
+        if (userNewRecord) {
+            System.out.println("Record 2");
+            scoreBoard.removeUser(username);
+        }
 
+        scoreBoard.addHighscore(indexOfHighscore, username, highscore);
+        scoreBoard.saveToFile();
+    }
+}
+
+/*
         //not needed
         if(newHighScore){
             System.out.println("The new score belongs in index: " + indexOfHighscore);
@@ -31,59 +39,13 @@ public class FileSequential {
         }
 
         if(newHighScore){
-            addNewHighscore(file, username, indexOfHighscore, highscore);
+            addNewHighscore(scoreBoard, username, indexOfHighscore, highscore);
         }else{
-            updateHighScore(file, username, indexOfHighscore, highscore);
+            updateHighScore(scoreBoard, username, indexOfHighscore, highscore);
         }
+
     }
 
-    private static ArrayList<Highscore> loadFile() {
-
-        ArrayList<Highscore> wholeFile = new ArrayList<>();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("./data/output_sequential.txt"));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                String[] lineSplit = line.split(",");
-                if (lineSplit != null) {
-                    Highscore hs = new Highscore(lineSplit[0].trim(), lineSplit[1].trim());
-                    wholeFile.add(hs);
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            System.err.println("Error handling file: ");
-            System.err.println(e);
-        }
-        return wholeFile;
-    }
-
-    private static int getIndexOfHighScore(int startPoint, int endPoint, ArrayList<Highscore> file, int score) {
-
-        int currentIndex = (startPoint + endPoint) / 2;
-
-        if(startPoint == endPoint){
-            return currentIndex + 1;
-        }
-
-        Highscore highscore = file.get(currentIndex);
-
-        if (highscore.getScore() == score){
-            return currentIndex;
-        }
-
-        if (highscore.getScore() < score) {
-            return getIndexOfHighScore(startPoint, currentIndex - 1, file, score);
-        }
-
-        if (highscore.getScore() > score) {
-            return getIndexOfHighScore(currentIndex + 1, endPoint, file, score);
-        }
-
-        return 0;
-    }
 
 //    private static boolean isScoreNewRecord(int score, int index, ArrayList file){
 //
@@ -151,3 +113,4 @@ public class FileSequential {
         }
     }
 }
+*/

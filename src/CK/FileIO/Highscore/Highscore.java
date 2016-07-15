@@ -23,4 +23,12 @@ public class Highscore {
     public int getScore(){
         return this.score;
     }
+
+    public void setUsername(String usernamme){
+        this.username = usernamme;
+    }
+
+    public void setScore(int score){
+        this.score = score;
+    }
 }
