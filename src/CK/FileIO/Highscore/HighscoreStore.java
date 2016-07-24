@@ -44,13 +44,14 @@ public class HighscoreStore {
         for(int record = 0; record < this.highscores.size(); record++){
             Highscore scoreNow = this.highscores.get(record);
             if(scoreNow.getUsername().equals(username) && scoreNow.getScore() < score) {
-                System.out.println("User new highscore");
                 return true;
-            }else{
-                return false;
             }
         }
         return false;
+    }
+
+    public int findHighscorePosition(int score){
+        return findHighscorePosition(0, this.highscores.size()-1, score);
     }
 
     public int findHighscorePosition(int startPoint, int endPoint, int score){
