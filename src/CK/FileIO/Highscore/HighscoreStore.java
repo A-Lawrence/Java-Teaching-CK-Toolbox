@@ -43,9 +43,8 @@ public class HighscoreStore {
     public boolean isUserNewRecord(String username, int score){
         for(int record = 0; record < this.highscores.size(); record++){
             Highscore scoreNow = this.highscores.get(record);
-            if(scoreNow.getUsername() == username && scoreNow.getScore() < score) {
+            if(scoreNow.getUsername().equals(username) && scoreNow.getScore() < score) {
                 System.out.println("User new highscore");
-
                 return true;
             }else{
                 return false;
@@ -55,6 +54,9 @@ public class HighscoreStore {
     }
 
     public int findHighscorePosition(int startPoint, int endPoint, int score){
+        if(this.highscores.size() < 1){
+            return 0;
+        }
 
         int currentIndex = (startPoint + endPoint) / 2;
 

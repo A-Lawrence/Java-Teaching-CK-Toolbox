@@ -1,3 +1,4 @@
+import CK.Assignment1.NameInputAssignment1;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
